@@ -390,7 +390,7 @@ export default function DashboardPage() {
                   <p className={`text-xl font-extrabold tracking-tight ${m.color}`}>{m.value}</p>
                 </div>
                 <div className="w-16 h-8">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <LineChart data={m.sparkline}>
                       <Line
                         type="monotone"
@@ -450,7 +450,7 @@ export default function DashboardPage() {
             {t.dashboard.revenueByMonth}
           </h3>
           <div className="w-full flex-1 mt-2">
-            <ResponsiveContainer width="100%" height={210}>
+            <ResponsiveContainer width="100%" height={210} minWidth={0}>
               <AreaChart data={computedData.revenueChart}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
@@ -502,7 +502,7 @@ export default function DashboardPage() {
             {t.dashboard.salesByCategory}
           </h3>
           <div className="relative w-full flex-1 flex items-center justify-center min-h-0">
-            <ResponsiveContainer width="100%" height={210}>
+            <ResponsiveContainer width="100%" height={210} minWidth={0}>
               <PieChart>
                 <Pie
                   data={translatedSalesByCategory}
@@ -546,7 +546,7 @@ export default function DashboardPage() {
             {t.dashboard.newVsChurned}
           </h3>
           <div className="w-full flex-1 mt-2">
-            <ResponsiveContainer width="100%" height={230}>
+            <ResponsiveContainer width="100%" height={230} minWidth={0}>
               <BarChart data={computedData.newVsChurnedChart}>
                 <XAxis
                   dataKey="month"
