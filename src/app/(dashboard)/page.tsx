@@ -253,6 +253,14 @@ export default function DashboardPage() {
     };
   }, [data, dateRange, customStart, customEnd, locale, t]);
 
+  const translatedSalesByCategory = useMemo(() => {
+    if (!data?.salesByCategory) return [];
+    return data.salesByCategory.map((item) => ({
+      ...item,
+      name: t.categories[item.name as keyof typeof t.categories] || item.name,
+    }));
+  }, [data, t]);
+
   if (isLoading || !data || !computedData) {
     return (
       <div className="space-y-6">
@@ -475,6 +483,7 @@ export default function DashboardPage() {
                 <Area
                   type="monotone"
                   dataKey="value"
+                  name={t.dashboard.revenue}
                   stroke="#6366f1"
                   strokeWidth={2.5}
                   fillOpacity={1}
@@ -496,14 +505,14 @@ export default function DashboardPage() {
             <ResponsiveContainer width="100%" height={210}>
               <PieChart>
                 <Pie
-                  data={data.salesByCategory}
+                  data={translatedSalesByCategory}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={55}
                   outerRadius={75}
                   paddingAngle={3}
                 >
-                  {data.salesByCategory.map((_, i) => (
+                  {translatedSalesByCategory.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
@@ -521,7 +530,7 @@ export default function DashboardPage() {
             <div className="absolute flex flex-col items-center text-center select-none pt-1">
               <span className="text-lg font-black text-zinc-800 dark:text-zinc-100">100%</span>
               <span className="text-[9px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider">
-                {locale === 'ru' ? 'Расходы' : 'expenses'}
+                {locale === 'ru' ? 'Продажи' : 'sales'}
               </span>
             </div>
           </div>

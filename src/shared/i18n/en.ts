@@ -163,4 +163,14 @@ export const en = {
     active: 'Active',
     banned: 'Banned',
   },
+  categories: {
+    Electronics: 'Electronics',
+    Clothing: 'Clothing',
+    'Home & Garden': 'Home & Garden',
+    Sports: 'Sports',
+    Books: 'Books',
+    Toys: 'Toys',
+    Food: 'Food',
+    Health: 'Health',
+  },
 } as const;

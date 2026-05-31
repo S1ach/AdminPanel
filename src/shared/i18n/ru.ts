@@ -163,4 +163,14 @@ export const ru = {
     active: 'Активен',
     banned: 'Заблокирован',
   },
+  categories: {
+    Electronics: 'Электроника',
+    Clothing: 'Одежда',
+    'Home & Garden': 'Дом и сад',
+    Sports: 'Спорт',
+    Books: 'Книги',
+    Toys: 'Игрушки',
+    Food: 'Продукты',
+    Health: 'Здоровье',
+  },
 } as const;

@@ -132,7 +132,10 @@ function ProductsContent() {
 
   const catOptions = [
     { label: t.products.allCategories, value: '' },
-    ...PRODUCT_CATEGORIES.map((c) => ({ label: c, value: c })),
+    ...PRODUCT_CATEGORIES.map((c) => ({
+      label: t.categories[c as keyof typeof t.categories] || c,
+      value: c,
+    })),
   ];
 
   return (
@@ -235,7 +238,9 @@ function ProductsContent() {
                   <td className="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100">
                     {p.name}
                   </td>
-                  <td className="px-4 py-3 text-zinc-500">{p.category}</td>
+                  <td className="px-4 py-3 text-zinc-500">
+                    {t.categories[p.category as keyof typeof t.categories] || p.category}
+                  </td>
                   <td className="px-4 py-3 font-medium text-zinc-700 dark:text-zinc-300">
                     {formatCurrency(p.price, locale === 'ru' ? 'ru-RU' : 'en-US')}
                   </td>
