@@ -38,7 +38,16 @@ export interface MockProduct {
   status: 'in_stock' | 'out_of_stock';
 }
 
-const categories = ['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Toys', 'Food', 'Health'];
+const categories = [
+  'Electronics',
+  'Clothing',
+  'Home & Garden',
+  'Sports',
+  'Books',
+  'Toys',
+  'Food',
+  'Health',
+];
 
 const products: MockProduct[] = Array.from({ length: 64 }, (_, i) => {
   const stock = faker.number.int({ min: 0, max: 200 });
@@ -77,7 +86,12 @@ export interface MockOrder {
 const orders: MockOrder[] = Array.from({ length: 73 }, (_, i) => {
   const items = Array.from({ length: faker.number.int({ min: 1, max: 4 }) }, () => {
     const p = faker.helpers.arrayElement(products);
-    return { productId: p.id, name: p.name, quantity: faker.number.int({ min: 1, max: 3 }), price: p.price };
+    return {
+      productId: p.id,
+      name: p.name,
+      quantity: faker.number.int({ min: 1, max: 3 }),
+      price: p.price,
+    };
   });
   return {
     id: 1000 + i,
@@ -109,7 +123,20 @@ export interface MockAnalytics {
 }
 
 function buildAnalytics(): MockAnalytics {
-  const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+  const months = [
+    'Янв',
+    'Фев',
+    'Мар',
+    'Апр',
+    'Май',
+    'Июн',
+    'Июл',
+    'Авг',
+    'Сен',
+    'Окт',
+    'Ноя',
+    'Дек',
+  ];
   return {
     revenue: 2_847_300,
     revenueTrend: 12.5,
@@ -119,9 +146,19 @@ function buildAnalytics(): MockAnalytics {
     ordersTrend: -3.1,
     conversion: 4.7,
     conversionTrend: 1.2,
-    revenueByMonth: months.map((m) => ({ month: m, value: faker.number.int({ min: 100000, max: 500000 }) })),
-    newVsChurned: months.map((m) => ({ month: m, newUsers: faker.number.int({ min: 20, max: 80 }), churned: faker.number.int({ min: 5, max: 30 }) })),
-    salesByCategory: categories.map((c) => ({ name: c, value: faker.number.int({ min: 500, max: 5000 }) })),
+    revenueByMonth: months.map((m) => ({
+      month: m,
+      value: faker.number.int({ min: 100000, max: 500000 }),
+    })),
+    newVsChurned: months.map((m) => ({
+      month: m,
+      newUsers: faker.number.int({ min: 20, max: 80 }),
+      churned: faker.number.int({ min: 5, max: 30 }),
+    })),
+    salesByCategory: categories.map((c) => ({
+      name: c,
+      value: faker.number.int({ min: 500, max: 5000 }),
+    })),
     recentEvents: Array.from({ length: 7 }, (_, j) => ({
       id: j,
       text: faker.helpers.arrayElement([

@@ -11,7 +11,10 @@ export async function GET(request: NextRequest) {
   const deliveryStatus = sp.get('deliveryStatus');
 
   let filtered = [...orders];
-  if (search) filtered = filtered.filter((o) => o.client.toLowerCase().includes(search) || String(o.id).includes(search));
+  if (search)
+    filtered = filtered.filter(
+      (o) => o.client.toLowerCase().includes(search) || String(o.id).includes(search),
+    );
   if (paymentStatus) filtered = filtered.filter((o) => o.paymentStatus === paymentStatus);
   if (deliveryStatus) filtered = filtered.filter((o) => o.deliveryStatus === deliveryStatus);
 

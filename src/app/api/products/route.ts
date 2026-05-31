@@ -12,13 +12,18 @@ export async function GET(request: NextRequest) {
   const sortOrder = sp.get('sortOrder') || 'asc';
 
   let filtered = [...products];
-  if (search) filtered = filtered.filter((p) => p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search));
+  if (search)
+    filtered = filtered.filter(
+      (p) => p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search),
+    );
   if (category) filtered = filtered.filter((p) => p.category === category);
 
   filtered.sort((a, b) => {
     const key = sortBy as keyof typeof a;
     if (typeof a[key] === 'number' && typeof b[key] === 'number') {
-      return sortOrder === 'desc' ? (b[key] as number) - (a[key] as number) : (a[key] as number) - (b[key] as number);
+      return sortOrder === 'desc'
+        ? (b[key] as number) - (a[key] as number)
+        : (a[key] as number) - (b[key] as number);
     }
     return 0;
   });

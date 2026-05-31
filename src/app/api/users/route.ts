@@ -11,7 +11,10 @@ export async function GET(request: NextRequest) {
   const status = sp.get('status');
 
   let filtered = [...users];
-  if (search) filtered = filtered.filter((u) => u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search));
+  if (search)
+    filtered = filtered.filter(
+      (u) => u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search),
+    );
   if (role) filtered = filtered.filter((u) => u.role === role);
   if (status) filtered = filtered.filter((u) => u.status === status);
 

@@ -33,7 +33,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem('locale') as Locale | null;
     if (saved && dictionaries[saved]) {
-      setLocaleState(saved);
+      setTimeout(() => {
+        setLocaleState(saved);
+      }, 0);
     }
   }, []);
 

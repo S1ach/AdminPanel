@@ -1,15 +1,30 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { MockProduct } from '@shared/mock/db';
 
-interface ProductsResponse { data: MockProduct[]; totalCount: number; totalPages: number; page: number; }
-interface ProductsParams { page?: number; limit?: number; search?: string; category?: string; sortBy?: string; sortOrder?: string; }
+interface ProductsResponse {
+  data: MockProduct[];
+  totalCount: number;
+  totalPages: number;
+  page: number;
+}
+interface ProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  sortBy?: string;
+  sortOrder?: string;
+}
 
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['Products'],
   endpoints: (b) => ({
-    getProducts: b.query<ProductsResponse, ProductsParams>({ query: (p) => ({ url: '/products', params: p }), providesTags: ['Products'] }),
+    getProducts: b.query<ProductsResponse, ProductsParams>({
+      query: (p) => ({ url: '/products', params: p }),
+      providesTags: ['Products'],
+    }),
     updateProduct: b.mutation<MockProduct, { id: number; body: Partial<MockProduct> }>({
       query: ({ id, body }) => ({ url: `/products/${id}`, method: 'PUT', body }),
       invalidatesTags: ['Products'],
@@ -21,5 +36,6 @@ export const productApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useUpdateProductMutation, useDeleteProductMutation } = productApi;
+export const { useGetProductsQuery, useUpdateProductMutation, useDeleteProductMutation } =
+  productApi;
 export type { MockProduct as Product, ProductsResponse, ProductsParams };

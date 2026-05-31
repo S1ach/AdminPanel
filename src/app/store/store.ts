@@ -12,7 +12,13 @@ export const makeStore = () =>
       [orderApi.reducerPath]: orderApi.reducer,
       [analyticsApi.reducerPath]: analyticsApi.reducer,
     },
-    middleware: (gm) => gm().concat(userApi.middleware, productApi.middleware, orderApi.middleware, analyticsApi.middleware),
+    middleware: (gm) =>
+      gm().concat(
+        userApi.middleware,
+        productApi.middleware,
+        orderApi.middleware,
+        analyticsApi.middleware,
+      ),
   });
 
 export type AppStore = ReturnType<typeof makeStore>;

@@ -27,12 +27,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('theme') as Theme | null;
-    if (saved) setThemeState(saved);
+    if (saved) {
+      setTimeout(() => {
+        setThemeState(saved);
+      }, 0);
+    }
   }, []);
 
   useEffect(() => {
     const res = theme === 'system' ? getSystemTheme() : theme;
-    setResolved(res);
+    setTimeout(() => {
+      setResolved(res);
+    }, 0);
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(res);
     localStorage.setItem('theme', theme);
@@ -49,9 +55,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setTheme = useCallback((t: Theme) => setThemeState(t), []);
 
   return (
-    <ThemeContext.Provider value={{ theme, resolved, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={{ theme, resolved, setTheme }}>{children}</ThemeContext.Provider>
   );
 }
 

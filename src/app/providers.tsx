@@ -9,9 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <StoreProvider>
       <ThemeProvider>
         <I18nProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
+          <ToastProvider>{children}</ToastProvider>
         </I18nProvider>
       </ThemeProvider>
     </StoreProvider>
