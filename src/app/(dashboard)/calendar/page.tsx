@@ -15,35 +15,47 @@ interface CalendarEvent {
 
 const CATEGORY_COLORS: Record<
   CalendarEvent['category'],
-  { bg: string; border: string; text: string; dot: string; labelRu: string; labelEn: string }
+  {
+    bg: string;
+    border: string;
+    borderLeft: string;
+    text: string;
+    dot: string;
+    labelRu: string;
+    labelEn: string;
+  }
 > = {
   marketing: {
-    bg: 'bg-indigo-50 dark:bg-indigo-500/10',
-    border: 'border-indigo-200 dark:border-indigo-500/20',
+    bg: 'bg-indigo-50/60 dark:bg-indigo-500/[0.03]',
+    border: 'border-indigo-100 dark:border-indigo-500/10',
+    borderLeft: 'border-l-indigo-600 dark:border-l-indigo-500',
     text: 'text-indigo-700 dark:text-indigo-400',
     dot: 'bg-indigo-600 dark:bg-indigo-400',
     labelRu: 'Маркетинг',
     labelEn: 'Marketing',
   },
   maintenance: {
-    bg: 'bg-red-50 dark:bg-red-500/10',
-    border: 'border-red-200 dark:border-red-500/20',
+    bg: 'bg-red-50/60 dark:bg-red-500/[0.03]',
+    border: 'border-red-100 dark:border-red-500/10',
+    borderLeft: 'border-l-red-600 dark:border-l-red-500',
     text: 'text-red-700 dark:text-red-400',
     dot: 'bg-red-600 dark:bg-red-400',
     labelRu: 'Обслуживание',
     labelEn: 'Maintenance',
   },
   task: {
-    bg: 'bg-amber-50 dark:bg-amber-500/10',
-    border: 'border-amber-200 dark:border-amber-500/20',
+    bg: 'bg-amber-50/60 dark:bg-amber-500/[0.03]',
+    border: 'border-amber-100 dark:border-amber-500/10',
+    borderLeft: 'border-l-amber-600 dark:border-l-amber-500',
     text: 'text-amber-700 dark:text-amber-400',
     dot: 'bg-amber-600 dark:bg-amber-400',
     labelRu: 'Задача',
     labelEn: 'Task',
   },
   promo: {
-    bg: 'bg-emerald-50 dark:bg-emerald-500/10',
-    border: 'border-emerald-200 dark:border-emerald-500/20',
+    bg: 'bg-emerald-50/60 dark:bg-emerald-500/[0.03]',
+    border: 'border-emerald-100 dark:border-emerald-500/10',
+    borderLeft: 'border-l-emerald-600 dark:border-l-emerald-500',
     text: 'text-emerald-700 dark:text-emerald-400',
     dot: 'bg-emerald-600 dark:bg-emerald-400',
     labelRu: 'Промокод',
@@ -345,25 +357,43 @@ export default function CalendarPage() {
           <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
             {t.calendar.categories}
           </h3>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             {(Object.keys(CATEGORY_COLORS) as Array<CalendarEvent['category']>).map((cat) => {
               const cl = CATEGORY_COLORS[cat];
               const label = locale === 'ru' ? cl.labelRu : cl.labelEn;
+              const isActive = activeFilters[cat];
               return (
-                <label key={cat} className="flex items-center gap-2.5 cursor-pointer text-sm">
-                  <input
-                    type="checkbox"
-                    checked={activeFilters[cat]}
-                    onChange={() => setActiveFilters((f) => ({ ...f, [cat]: !f[cat] }))}
-                    className="w-4 h-4 rounded border-zinc-300 dark:border-white/10 text-indigo-600 focus:ring-indigo-500/20 bg-white dark:bg-white/5 cursor-pointer"
-                  />
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className={cn('w-2 h-2 rounded-full flex-shrink-0', cl.dot)} />
-                    <span className="text-zinc-700 dark:text-zinc-300 font-medium truncate">
-                      {label}
-                    </span>
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveFilters((f) => ({ ...f, [cat]: !f[cat] }))}
+                  className={cn(
+                    'w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer select-none outline-none text-left',
+                    isActive
+                      ? cn(cl.bg, cl.border, cl.text, 'shadow-sm')
+                      : 'bg-zinc-50/50 border-zinc-100 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-50 dark:bg-white/[0.01] dark:border-white/[0.04] dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:bg-white/[0.02]',
+                  )}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span
+                      className={cn(
+                        'w-2 h-2 rounded-full flex-shrink-0 transition-transform duration-300',
+                        cl.dot,
+                        isActive && 'scale-110',
+                      )}
+                    />
+                    <span className="truncate">{label}</span>
                   </div>
-                </label>
+                  {/* Active/Inactive state indicator dot */}
+                  <span
+                    className={cn(
+                      'w-1.5 h-1.5 rounded-full transition-all duration-300',
+                      isActive
+                        ? cl.dot
+                        : 'bg-transparent border border-zinc-300 dark:border-zinc-700',
+                    )}
+                  />
+                </button>
               );
             })}
           </div>
@@ -400,27 +430,45 @@ export default function CalendarPage() {
                     key={e.id}
                     onClick={(clickEv) => handleOpenEdit(clickEv, e)}
                     className={cn(
-                      'p-2.5 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:shadow-sm',
-                      cl.bg,
-                      cl.border,
+                      'pl-3.5 pr-3 py-2.5 rounded-xl border-l-[3.5px] border-y border-r transition-all duration-300 cursor-pointer hover:translate-x-1 hover:shadow-sm flex flex-col gap-1',
+                      'bg-white dark:bg-white/[0.02] border-zinc-200 dark:border-white/[0.04]',
+                      cl.borderLeft,
                     )}
                   >
-                    <div className="flex items-center justify-between gap-1.5 mb-1">
+                    <div className="flex items-center justify-between gap-1.5">
                       <span
                         className={cn('text-[9px] font-bold uppercase tracking-wider', cl.text)}
                       >
                         {locale === 'ru' ? cl.labelRu : cl.labelEn}
                       </span>
-                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold font-mono">
+                      <span className="text-[9px] text-zinc-400 dark:text-zinc-500 font-semibold font-mono flex items-center gap-1">
+                        <svg
+                          className="w-3 h-3 opacity-60"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
                         {new Date(e.date).toLocaleDateString(locale === 'ru' ? 'ru-RU' : 'en-US', {
                           day: 'numeric',
                           month: 'short',
                         })}
                       </span>
                     </div>
-                    <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+                    <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-100 truncate mt-0.5">
                       {e.title}
                     </h4>
+                    {e.description && (
+                      <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
+                        {e.description}
+                      </p>
+                    )}
                   </div>
                 );
               })
@@ -510,24 +558,25 @@ export default function CalendarPage() {
                     key={cell.dateStr}
                     onClick={() => handleOpenAdd(cell.dateStr)}
                     className={cn(
-                      'p-1.5 border rounded-xl flex flex-col h-full min-h-[64px] sm:min-h-[76px] transition-all hover:bg-zinc-50/50 dark:hover:bg-white/[0.01] cursor-pointer relative group',
+                      'p-1.5 border rounded-xl flex flex-col h-full min-h-[64px] sm:min-h-[76px] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer relative group',
                       cell.isCurrentMonth
                         ? 'bg-white border-zinc-200 dark:bg-white/[0.02] dark:border-white/[0.04]'
                         : 'bg-zinc-50/40 border-zinc-100 dark:bg-zinc-950/20 dark:border-white/[0.02] opacity-40',
-                      isToday &&
-                        'ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950',
+                      isToday
+                        ? 'border-indigo-500 dark:border-indigo-400 bg-indigo-500/[0.02] dark:bg-indigo-500/[0.04] shadow-[0_0_12px_rgba(99,102,241,0.12)]'
+                        : 'hover:shadow-md hover:border-zinc-300 dark:hover:border-white/10',
                     )}
                   >
                     {/* Day Number Header */}
                     <div className="flex items-center justify-between mb-1">
                       <span
                         className={cn(
-                          'text-[10px] font-bold font-mono px-1 rounded-md flex items-center justify-center h-4 min-w-[16px]',
+                          'text-[9px] font-bold font-mono rounded-full flex items-center justify-center transition-all duration-300',
                           isToday
-                            ? 'bg-indigo-600 text-white'
+                            ? 'bg-indigo-600 text-white w-5 h-5 shadow-sm shadow-indigo-600/35 scale-110'
                             : cell.isCurrentMonth
-                              ? 'text-zinc-700 dark:text-zinc-300'
-                              : 'text-zinc-400 dark:text-zinc-600',
+                              ? 'text-zinc-700 dark:text-zinc-300 w-4 h-4'
+                              : 'text-zinc-400 dark:text-zinc-600 w-4 h-4',
                         )}
                       >
                         {cell.day}
@@ -543,14 +592,15 @@ export default function CalendarPage() {
                             key={e.id}
                             onClick={(clickEv) => handleOpenEdit(clickEv, e)}
                             className={cn(
-                              'px-1.5 py-0.5 rounded-lg border text-[9px] font-semibold truncate leading-tight transition-transform duration-100 hover:scale-[1.02] active:scale-[0.98]',
+                              'px-1.5 py-0.5 rounded-lg border text-[9px] font-bold truncate leading-tight transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-1 cursor-pointer select-none',
                               cl.bg,
                               cl.border,
                               cl.text,
                             )}
                             title={e.title}
                           >
-                            {e.title}
+                            <span className={cn('w-1 h-1 rounded-full flex-shrink-0', cl.dot)} />
+                            <span className="truncate">{e.title}</span>
                           </div>
                         );
                       })}

@@ -33,100 +33,6 @@ const COLORS = [
   '#84cc16',
 ];
 
-// Custom Tooltips for charts
-interface TooltipPayloadItem {
-  name: string;
-  value: number;
-  dataKey?: string | number;
-  color?: string;
-  payload?: {
-    fill?: string;
-    [key: string]: unknown;
-  };
-}
-
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: TooltipPayloadItem[];
-  label?: string;
-}
-
-const AreaTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-xl border border-zinc-200/50 dark:border-white/10 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md p-3 shadow-xl flex flex-col gap-1 select-none animate-in fade-in duration-100">
-        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 font-mono tracking-wider">
-          {label}
-        </p>
-        <div className="flex items-center gap-2 text-xs font-semibold">
-          <span className="w-2 h-2 rounded-full bg-indigo-500" />
-          <span className="text-zinc-500 dark:text-zinc-400">{payload[0].name}:</span>
-          <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 ml-auto">
-            {payload[0].value.toLocaleString()} ₽
-          </span>
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
-const BarTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-xl border border-zinc-200/50 dark:border-white/10 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md p-3 shadow-xl flex flex-col gap-1.5 select-none animate-in fade-in duration-100 min-w-[120px]">
-        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 font-mono tracking-wider">
-          {label}
-        </p>
-        <div className="flex flex-col gap-1">
-          {payload.map((item, index) => {
-            const isNew = item.dataKey === 'newUsers';
-            const dotBg = isNew ? 'bg-emerald-500' : 'bg-rose-500';
-            const textClass = isNew
-              ? 'text-emerald-600 dark:text-emerald-450'
-              : 'text-rose-600 dark:text-rose-450';
-            return (
-              <div
-                key={index}
-                className="flex items-center justify-between gap-4 text-xs font-semibold"
-              >
-                <div className="flex items-center gap-2">
-                  <span className={cn('w-2 h-2 rounded-full', dotBg)} />
-                  <span className="text-zinc-550 dark:text-zinc-400 font-medium">{item.name}</span>
-                </div>
-                <span className={cn('font-mono font-bold ml-auto', textClass)}>{item.value}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
-const PieTooltip = ({ active, payload }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-xl border border-zinc-200/50 dark:border-white/10 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md p-3 shadow-xl flex flex-col gap-1 select-none animate-in fade-in duration-100">
-        <div className="flex items-center gap-4 text-xs font-semibold">
-          <div className="flex items-center gap-2">
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{ backgroundColor: payload[0].payload?.fill || payload[0].color }}
-            />
-            <span className="text-zinc-500 dark:text-zinc-400 font-medium">{payload[0].name}:</span>
-          </div>
-          <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100 ml-auto">
-            {payload[0].value.toLocaleString()} ₽
-          </span>
-        </div>
-      </div>
-    );
-  }
-  return null;
-};
-
 // Circular progress component for spending parameters
 const CircularProgress = ({
   value,
@@ -554,23 +460,35 @@ export default function DashboardPage() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid
-                  strokeDasharray="4 4"
+                  strokeDasharray="3 3"
                   vertical={false}
-                  stroke="var(--chart-grid-color, rgba(120, 120, 120, 0.08))"
+                  stroke="currentColor"
+                  className="text-zinc-200/50 dark:text-white/[0.03]"
                 />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#71717a', fontSize: 11 }}
+                  tick={{ fill: '#71717a', fontSize: 10, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: '#71717a', fontSize: 11 }}
+                  tick={{ fill: '#71717a', fontSize: 10, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(val) => `${val / 1000}k`}
                 />
-                <Tooltip content={<AreaTooltip />} />
+                <Tooltip
+                  contentStyle={{
+                    background: 'var(--tooltip-bg, #18181b)',
+                    border: 'var(--tooltip-border-style, none)',
+                    borderRadius: 12,
+                    fontSize: 12,
+                    color: 'var(--tooltip-text, #fff)',
+                    boxShadow:
+                      '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                />
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -608,7 +526,15 @@ export default function DashboardPage() {
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip content={<PieTooltip />} />
+                <Tooltip
+                  contentStyle={{
+                    background: 'var(--tooltip-bg, #18181b)',
+                    border: 'var(--tooltip-border-style, none)',
+                    borderRadius: 12,
+                    fontSize: 11,
+                    color: 'var(--tooltip-text, #fff)',
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute flex flex-col items-center text-center select-none pt-1">
@@ -632,44 +558,57 @@ export default function DashboardPage() {
             <ResponsiveContainer width="100%" height={230} minWidth={0}>
               <BarChart data={computedData.newVsChurnedChart}>
                 <defs>
-                  <linearGradient id="newUsersGrad" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="barNewUsers" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#10b981" stopOpacity={0.9} />
-                    <stop offset="100%" stopColor="#059669" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#059669" stopOpacity={0.3} />
                   </linearGradient>
-                  <linearGradient id="churnedGrad" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="barChurned" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.9} />
-                    <stop offset="100%" stopColor="#be123c" stopOpacity={0.7} />
+                    <stop offset="100%" stopColor="#e11d48" stopOpacity={0.3} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
-                  strokeDasharray="4 4"
+                  strokeDasharray="3 3"
                   vertical={false}
-                  stroke="var(--chart-grid-color, rgba(120, 120, 120, 0.08))"
+                  stroke="currentColor"
+                  className="text-zinc-200/50 dark:text-white/[0.03]"
                 />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: '#71717a', fontSize: 11 }}
+                  tick={{ fill: '#71717a', fontSize: 10, fontWeight: 500 }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis tick={{ fill: '#71717a', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  content={<BarTooltip />}
-                  cursor={{ fill: 'var(--chart-cursor-bg, rgba(99, 102, 241, 0.04))', radius: 8 }}
+                <YAxis
+                  tick={{ fill: '#71717a', fontSize: 10, fontWeight: 500 }}
+                  axisLine={false}
+                  tickLine={false}
                 />
-                <Legend wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
+                <Tooltip
+                  contentStyle={{
+                    background: 'var(--tooltip-bg, #18181b)',
+                    border: 'var(--tooltip-border-style, none)',
+                    borderRadius: 12,
+                    fontSize: 12,
+                    color: 'var(--tooltip-text, #fff)',
+                    boxShadow:
+                      '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                />
+                <Legend wrapperStyle={{ fontSize: 10, fontWeight: 500, paddingTop: 10 }} />
                 <Bar
                   dataKey="newUsers"
                   name={t.dashboard.newUsers}
-                  fill="url(#newUsersGrad)"
-                  radius={[6, 6, 0, 0]}
+                  fill="url(#barNewUsers)"
+                  radius={[5, 5, 0, 0]}
                   maxBarSize={14}
                 />
                 <Bar
                   dataKey="churned"
                   name={t.dashboard.churnedUsers}
-                  fill="url(#churnedGrad)"
-                  radius={[6, 6, 0, 0]}
+                  fill="url(#barChurned)"
+                  radius={[5, 5, 0, 0]}
                   maxBarSize={14}
                 />
               </BarChart>
