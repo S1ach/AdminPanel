@@ -137,6 +137,7 @@ export function Sidebar() {
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
   const handleSignOut = () => {
+    localStorage.removeItem('auth-token');
     localStorage.removeItem('profile-name');
     localStorage.removeItem('profile-avatar');
     localStorage.removeItem('profile-email');
