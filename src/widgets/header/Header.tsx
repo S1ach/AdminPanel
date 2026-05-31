@@ -286,7 +286,7 @@ export function Header() {
 
         {/* Global Search Results Dropdown Overlay */}
         {showSearchResults && (
-          <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-zinc-200 dark:border-white/[0.08] bg-white dark:bg-zinc-900 shadow-2xl py-2.5 z-50 max-h-[360px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-zinc-200 dark:border-white/[0.08] bg-white dark:bg-zinc-900 shadow-2xl py-2.5 z-50 overflow-visible animate-in fade-in slide-in-from-top-2 duration-150">
             {search.trim() === '' ? (
               <div className="px-1.5 py-1">
                 <span className="px-3.5 py-1 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block mb-1">
@@ -398,7 +398,7 @@ export function Header() {
                       <span className="text-[9px] lowercase font-normal italic">смотреть все</span>
                     </div>
                     <div className="mt-1 divide-y divide-zinc-100 dark:divide-white/[0.04]">
-                      {productsRes.data.map((p) => (
+                      {productsRes.data.map((p, idx) => (
                         <div
                           key={p.id}
                           onClick={() => {
@@ -411,16 +411,22 @@ export function Header() {
                           <div className="relative group w-8 h-8 flex-shrink-0">
                             {/* Small Thumbnail */}
                             <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-200/50 dark:border-white/10 shadow-sm">
-                              <img
-                                src={p.photo}
-                                alt=""
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                              />
+                              <img src={p.photo} alt="" className="w-full h-full object-cover" />
                             </div>
 
                             {/* Floating Zoomed Preview Popup */}
-                            <div className="absolute left-10 top-1/2 -translate-y-1/2 z-50 pointer-events-none opacity-0 scale-95 translate-x-2 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 transition-all duration-200">
-                              <div className="w-28 h-28 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-2xl bg-white dark:bg-zinc-950 p-0.5">
+                            <div
+                              className={cn(
+                                'absolute left-10 z-50 pointer-events-none opacity-0 scale-95 translate-x-2 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 transition-all duration-200',
+                                idx === 0
+                                  ? 'top-0'
+                                  : idx === productsRes.data.length - 1 &&
+                                      productsRes.data.length > 1
+                                    ? 'bottom-0'
+                                    : 'top-1/2 -translate-y-1/2',
+                              )}
+                            >
+                              <div className="w-40 h-40 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-2xl bg-white dark:bg-zinc-950 p-0.5">
                                 <img
                                   src={p.photo}
                                   alt=""

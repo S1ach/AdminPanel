@@ -184,7 +184,7 @@ function ProductsContent() {
       ) : (
         <div
           className={cn(
-            'rounded-xl border overflow-hidden bg-white dark:bg-white/[0.02] border-zinc-200 dark:border-white/[0.06] transition-opacity',
+            'rounded-xl border bg-white dark:bg-white/[0.02] border-zinc-200 dark:border-white/[0.06] transition-opacity overflow-visible',
             isFetching && 'opacity-50',
           )}
         >
@@ -226,7 +226,7 @@ function ProductsContent() {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((p) => (
+              {data.data.map((p, idx) => (
                 <tr
                   key={p.id}
                   className="border-b border-zinc-100 dark:border-white/[0.04] hover:bg-zinc-50 dark:hover:bg-white/[0.02] transition-colors"
@@ -236,16 +236,21 @@ function ProductsContent() {
                     <div className="relative group w-10 h-10 flex-shrink-0">
                       {/* Small Thumbnail */}
                       <div className="w-10 h-10 rounded-lg overflow-hidden border border-zinc-200/50 dark:border-white/10 shadow-sm">
-                        <img
-                          src={p.photo}
-                          alt=""
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        />
+                        <img src={p.photo} alt="" className="w-full h-full object-cover" />
                       </div>
 
                       {/* Floating Zoomed Preview Popup */}
-                      <div className="absolute left-12 top-1/2 -translate-y-1/2 z-50 pointer-events-none opacity-0 scale-95 translate-x-2 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 transition-all duration-200">
-                        <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-2xl bg-white dark:bg-zinc-950 p-0.5">
+                      <div
+                        className={cn(
+                          'absolute left-12 z-50 pointer-events-none opacity-0 scale-95 translate-x-2 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 transition-all duration-200',
+                          idx === 0
+                            ? 'top-0'
+                            : idx === data.data.length - 1 && data.data.length > 1
+                              ? 'bottom-0'
+                              : 'top-1/2 -translate-y-1/2',
+                        )}
+                      >
+                        <div className="w-48 h-48 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-2xl bg-white dark:bg-zinc-950 p-0.5">
                           <img
                             src={p.photo}
                             alt=""
