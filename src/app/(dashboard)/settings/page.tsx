@@ -44,6 +44,17 @@ function SettingsContent() {
        
       setAvatar(savedAvatar);
     }
+
+    const savedEmailNotif = localStorage.getItem('settings-email-notifications');
+    const savedPushNotif = localStorage.getItem('settings-push-notifications');
+    if (savedEmailNotif !== null) {
+       
+      setEmailNotif(savedEmailNotif === 'true');
+    }
+    if (savedPushNotif !== null) {
+       
+      setPushNotif(savedPushNotif === 'true');
+    }
   }, []);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -284,7 +295,12 @@ function SettingsContent() {
                   {t.settings.emailNotifications}
                 </span>
                 <button
-                  onClick={() => setEmailNotif(!emailNotif)}
+                  onClick={() => {
+                    const newValue = !emailNotif;
+                    setEmailNotif(newValue);
+                    localStorage.setItem('settings-email-notifications', String(newValue));
+                    toast(t.settings.saved, 'success');
+                  }}
                   className={cn(
                     'w-11 h-6 rounded-full transition-colors flex-shrink-0 relative cursor-pointer outline-none',
                     emailNotif ? 'bg-indigo-600' : 'bg-zinc-300 dark:bg-zinc-700',
@@ -303,7 +319,12 @@ function SettingsContent() {
                   {t.settings.pushNotifications}
                 </span>
                 <button
-                  onClick={() => setPushNotif(!pushNotif)}
+                  onClick={() => {
+                    const newValue = !pushNotif;
+                    setPushNotif(newValue);
+                    localStorage.setItem('settings-push-notifications', String(newValue));
+                    toast(t.settings.saved, 'success');
+                  }}
                   className={cn(
                     'w-11 h-6 rounded-full transition-colors flex-shrink-0 relative cursor-pointer outline-none',
                     pushNotif ? 'bg-indigo-600' : 'bg-zinc-300 dark:bg-zinc-700',
