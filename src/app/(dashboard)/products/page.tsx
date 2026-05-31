@@ -233,12 +233,26 @@ function ProductsContent() {
                 >
                   <td className="px-4 py-3 text-zinc-400 text-xs font-mono">{p.sku}</td>
                   <td className="px-4 py-3">
-                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-zinc-200/50 dark:border-white/10 shadow-sm flex-shrink-0">
-                      <img
-                        src={p.photo}
-                        alt=""
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-125"
-                      />
+                    <div className="relative group w-10 h-10 flex-shrink-0">
+                      {/* Small Thumbnail */}
+                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-zinc-200/50 dark:border-white/10 shadow-sm">
+                        <img
+                          src={p.photo}
+                          alt=""
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                      </div>
+
+                      {/* Floating Zoomed Preview Popup */}
+                      <div className="absolute left-12 top-1/2 -translate-y-1/2 z-50 pointer-events-none opacity-0 scale-95 translate-x-2 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 transition-all duration-200">
+                        <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-indigo-500 shadow-2xl bg-white dark:bg-zinc-950 p-0.5">
+                          <img
+                            src={p.photo}
+                            alt=""
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100">
