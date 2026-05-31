@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Avatar } from '@shared/ui';
@@ -24,6 +24,8 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { t, locale } = useI18n();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isMac, setIsMac] = useState(false);
 
   const [profileName, setProfileName] = useState('Admin User');
   const [profileAvatar, setProfileAvatar] = useState<string | null>(null);
@@ -80,6 +82,7 @@ export function Header() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     updateProfile();
     window.addEventListener('profile-update', updateProfile);
+    setIsMac(navigator.userAgent.toLowerCase().includes('mac'));
 
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
@@ -101,9 +104,32 @@ export function Header() {
     }
     document.addEventListener('mousedown', handleClickOutside);
 
+    function handleKeyDown(event: KeyboardEvent) {
+      const isMacPlatform = navigator.userAgent.toLowerCase().includes('mac');
+      const isKCombined =
+        event.key.toLowerCase() === 'k' && (isMacPlatform ? event.metaKey : event.ctrlKey);
+      const isSlash =
+        event.key === '/' &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA';
+
+      if (isKCombined || isSlash) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        setShowSearchResults(true);
+      }
+
+      if (event.key === 'Escape') {
+        searchInputRef.current?.blur();
+        setShowSearchResults(false);
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       window.removeEventListener('profile-update', updateProfile);
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
@@ -243,6 +269,7 @@ export function Header() {
           </svg>
         </span>
         <input
+          ref={searchInputRef}
           type="text"
           value={search}
           onChange={(e) => {
@@ -251,8 +278,11 @@ export function Header() {
           }}
           onFocus={() => setShowSearchResults(true)}
           placeholder={locale === 'ru' ? 'Поиск...' : 'search'}
-          className="w-full pl-9 pr-4 py-1.5 bg-zinc-100/70 border border-transparent rounded-full text-xs outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-zinc-900 dark:bg-white/5 dark:text-zinc-100 dark:focus:bg-zinc-900 dark:focus:border-indigo-500/50"
+          className="w-full pl-9 pr-14 py-1.5 bg-zinc-100/70 border border-transparent rounded-full text-xs outline-none transition-all focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-zinc-900 dark:bg-white/5 dark:text-zinc-100 dark:focus:bg-zinc-900 dark:focus:border-indigo-500/50"
         />
+        <span className="absolute right-3.5 px-1.5 py-0.5 bg-zinc-200/50 text-[10px] text-zinc-400 dark:bg-white/5 dark:text-zinc-500 rounded font-mono font-bold pointer-events-none select-none">
+          {isMac ? '⌘K' : 'Ctrl+K'}
+        </span>
 
         {/* Global Search Results Dropdown Overlay */}
         {showSearchResults && (
