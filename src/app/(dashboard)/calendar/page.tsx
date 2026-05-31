@@ -18,34 +18,34 @@ const CATEGORY_COLORS: Record<
   { bg: string; border: string; text: string; dot: string; labelRu: string; labelEn: string }
 > = {
   marketing: {
-    bg: 'bg-indigo-50 dark:bg-indigo-500/10',
-    border: 'border-indigo-200 dark:border-indigo-500/20',
-    text: 'text-indigo-700 dark:text-indigo-400',
-    dot: 'bg-indigo-600 dark:bg-indigo-400',
+    bg: 'bg-indigo-500/[0.04] dark:bg-indigo-500/10',
+    border: 'border-l-2 border-t-0 border-r-0 border-b-0 border-indigo-500 rounded-l-none',
+    text: 'text-indigo-700 dark:text-indigo-300',
+    dot: 'bg-indigo-500 dark:bg-indigo-450',
     labelRu: 'Маркетинг',
     labelEn: 'Marketing',
   },
   maintenance: {
-    bg: 'bg-red-50 dark:bg-red-500/10',
-    border: 'border-red-200 dark:border-red-500/20',
-    text: 'text-red-700 dark:text-red-400',
-    dot: 'bg-red-600 dark:bg-red-400',
+    bg: 'bg-rose-500/[0.04] dark:bg-rose-500/10',
+    border: 'border-l-2 border-t-0 border-r-0 border-b-0 border-rose-500 rounded-l-none',
+    text: 'text-rose-700 dark:text-rose-300',
+    dot: 'bg-rose-500 dark:bg-rose-450',
     labelRu: 'Обслуживание',
     labelEn: 'Maintenance',
   },
   task: {
-    bg: 'bg-amber-50 dark:bg-amber-500/10',
-    border: 'border-amber-200 dark:border-amber-500/20',
-    text: 'text-amber-700 dark:text-amber-400',
-    dot: 'bg-amber-600 dark:bg-amber-400',
+    bg: 'bg-amber-500/[0.04] dark:bg-amber-500/10',
+    border: 'border-l-2 border-t-0 border-r-0 border-b-0 border-amber-500 rounded-l-none',
+    text: 'text-amber-700 dark:text-amber-300',
+    dot: 'bg-amber-500 dark:bg-amber-450',
     labelRu: 'Задача',
     labelEn: 'Task',
   },
   promo: {
-    bg: 'bg-emerald-50 dark:bg-emerald-500/10',
-    border: 'border-emerald-200 dark:border-emerald-500/20',
-    text: 'text-emerald-700 dark:text-emerald-400',
-    dot: 'bg-emerald-600 dark:bg-emerald-400',
+    bg: 'bg-emerald-500/[0.04] dark:bg-emerald-500/10',
+    border: 'border-l-2 border-t-0 border-r-0 border-b-0 border-emerald-500 rounded-l-none',
+    text: 'text-emerald-700 dark:text-emerald-300',
+    dot: 'bg-emerald-500 dark:bg-emerald-450',
     labelRu: 'Промокод',
     labelEn: 'Promo',
   },
@@ -152,13 +152,13 @@ export default function CalendarPage() {
         setEvents(JSON.parse(saved));
       } catch {
         const defaultEv = getDefaultEvents(locale);
-         
+
         setEvents(defaultEv);
         localStorage.setItem('calendar-events', JSON.stringify(defaultEv));
       }
     } else {
       const defaultEv = getDefaultEvents(locale);
-       
+
       setEvents(defaultEv);
       localStorage.setItem('calendar-events', JSON.stringify(defaultEv));
     }
@@ -241,6 +241,17 @@ export default function CalendarPage() {
       .sort((a, b) => a.date.localeCompare(b.date))
       .slice(0, 5);
   }, [events, activeFilters]);
+
+  // Category counts selector
+  const categoryCounts = useMemo(() => {
+    const counts = { marketing: 0, maintenance: 0, task: 0, promo: 0 };
+    events.forEach((e) => {
+      if (counts[e.category] !== undefined) {
+        counts[e.category]++;
+      }
+    });
+    return counts;
+  }, [events]);
 
   // Month navigation helpers
   const handlePrevMonth = () => {
@@ -341,26 +352,34 @@ export default function CalendarPage() {
       {/* Sidebar Filters & Upcoming Events */}
       <div className="lg:col-span-3 space-y-6">
         {/* Category Filters */}
-        <Card className="p-4">
-          <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
+        <Card className="p-4 bg-white/50 backdrop-blur-md dark:bg-white/[0.02]">
+          <h3 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-4">
             {t.calendar.categories}
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {(Object.keys(CATEGORY_COLORS) as Array<CalendarEvent['category']>).map((cat) => {
               const cl = CATEGORY_COLORS[cat];
               const label = locale === 'ru' ? cl.labelRu : cl.labelEn;
               return (
-                <label key={cat} className="flex items-center gap-2.5 cursor-pointer text-sm">
+                <label
+                  key={cat}
+                  className="flex items-center gap-2.5 cursor-pointer text-sm group select-none"
+                >
                   <input
                     type="checkbox"
                     checked={activeFilters[cat]}
                     onChange={() => setActiveFilters((f) => ({ ...f, [cat]: !f[cat] }))}
-                    className="w-4 h-4 rounded border-zinc-300 dark:border-white/10 text-indigo-600 focus:ring-indigo-500/20 bg-white dark:bg-white/5 cursor-pointer"
+                    className="w-4 h-4 rounded border-zinc-300 dark:border-white/10 text-indigo-600 focus:ring-indigo-500/20 bg-white dark:bg-white/5 cursor-pointer transition-colors"
                   />
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <span className={cn('w-2 h-2 rounded-full flex-shrink-0', cl.dot)} />
-                    <span className="text-zinc-700 dark:text-zinc-300 font-medium truncate">
-                      {label}
+                  <div className="flex-1 flex items-center justify-between min-w-0">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className={cn('w-2 h-2 rounded-full flex-shrink-0', cl.dot)} />
+                      <span className="text-zinc-700 dark:text-zinc-300 font-medium truncate group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">
+                        {label}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-white/5 text-zinc-400 dark:text-zinc-500 group-hover:bg-zinc-200/50 dark:group-hover:bg-white/10 transition-colors">
+                      {categoryCounts[cat]}
                     </span>
                   </div>
                 </label>
@@ -370,15 +389,15 @@ export default function CalendarPage() {
         </Card>
 
         {/* Upcoming List */}
-        <Card className="p-4 flex flex-col min-h-[250px]">
-          <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3.5">
+        <Card className="p-4 flex flex-col min-h-[280px] bg-white/50 backdrop-blur-md dark:bg-white/[0.02]">
+          <h3 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-4">
             {t.calendar.upcoming}
           </h3>
-          <div className="space-y-3 flex-1 overflow-y-auto pr-0.5">
+          <div className="flex-1 overflow-y-auto pr-0.5 no-scrollbar text-left">
             {upcomingEvents.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-zinc-400 dark:text-zinc-500 py-10">
                 <svg
-                  className="w-8 h-8 mb-2 opacity-50"
+                  className="w-8 h-8 mb-2 opacity-30"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -393,37 +412,54 @@ export default function CalendarPage() {
                 <span className="text-xs">{t.calendar.noEvents}</span>
               </div>
             ) : (
-              upcomingEvents.map((e) => {
-                const cl = CATEGORY_COLORS[e.category];
-                return (
-                  <div
-                    key={e.id}
-                    onClick={(clickEv) => handleOpenEdit(clickEv, e)}
-                    className={cn(
-                      'p-2.5 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.01] hover:shadow-sm',
-                      cl.bg,
-                      cl.border,
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-1.5 mb-1">
+              <div className="relative border-l border-zinc-200/60 dark:border-white/[0.06] pl-4 ml-2.5 space-y-4.5 my-2">
+                {upcomingEvents.map((e) => {
+                  const cl = CATEGORY_COLORS[e.category];
+                  return (
+                    <div
+                      key={e.id}
+                      onClick={(clickEv) => handleOpenEdit(clickEv, e)}
+                      className="relative group cursor-pointer"
+                    >
+                      {/* Timeline Dot */}
                       <span
-                        className={cn('text-[9px] font-bold uppercase tracking-wider', cl.text)}
-                      >
-                        {locale === 'ru' ? cl.labelRu : cl.labelEn}
-                      </span>
-                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold font-mono">
-                        {new Date(e.date).toLocaleDateString(locale === 'ru' ? 'ru-RU' : 'en-US', {
-                          day: 'numeric',
-                          month: 'short',
-                        })}
-                      </span>
+                        className={cn(
+                          'absolute -left-[20.5px] top-1 w-2.5 h-2.5 rounded-full border border-white dark:border-zinc-950 shadow-sm transition-transform group-hover:scale-125 duration-150',
+                          cl.dot,
+                        )}
+                      />
+
+                      {/* Event Detail */}
+                      <div className="space-y-0.5 select-none">
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span
+                            className={cn('text-[9px] font-bold uppercase tracking-wider', cl.text)}
+                          >
+                            {locale === 'ru' ? cl.labelRu : cl.labelEn}
+                          </span>
+                          <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold font-mono">
+                            {new Date(e.date).toLocaleDateString(
+                              locale === 'ru' ? 'ru-RU' : 'en-US',
+                              {
+                                day: 'numeric',
+                                month: 'short',
+                              },
+                            )}
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
+                          {e.title}
+                        </h4>
+                        {e.description && (
+                          <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
+                            {e.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <h4 className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
-                      {e.title}
-                    </h4>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </div>
             )}
           </div>
         </Card>
@@ -488,11 +524,11 @@ export default function CalendarPage() {
           {/* Grid Layout Container */}
           <div className="flex-1 flex flex-col min-h-0">
             {/* Weekdays Row */}
-            <div className="grid grid-cols-7 gap-1.5 mb-1.5 text-center select-none">
+            <div className="grid grid-cols-7 gap-1.5 mb-2 text-center select-none">
               {t.calendar.weekdays.map((w: string) => (
                 <div
                   key={w}
-                  className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase py-1"
+                  className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider py-1 font-sans"
                 >
                   {w}
                 </div>
@@ -510,28 +546,34 @@ export default function CalendarPage() {
                     key={cell.dateStr}
                     onClick={() => handleOpenAdd(cell.dateStr)}
                     className={cn(
-                      'p-1.5 border rounded-xl flex flex-col h-full min-h-[64px] sm:min-h-[76px] transition-all hover:bg-zinc-50/50 dark:hover:bg-white/[0.01] cursor-pointer relative group',
+                      'p-2 border rounded-xl flex flex-col h-full min-h-[64px] sm:min-h-[76px] transition-all duration-200 cursor-pointer relative group',
                       cell.isCurrentMonth
-                        ? 'bg-white border-zinc-200 dark:bg-white/[0.02] dark:border-white/[0.04]'
-                        : 'bg-zinc-50/40 border-zinc-100 dark:bg-zinc-950/20 dark:border-white/[0.02] opacity-40',
-                      isToday &&
-                        'ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950',
+                        ? 'bg-white border-zinc-200/80 dark:bg-white/[0.015] dark:border-white/[0.04]'
+                        : 'bg-zinc-50/20 border-zinc-150/60 dark:bg-transparent dark:border-white/[0.01] opacity-35',
+                      isToday
+                        ? 'border-indigo-500/80 dark:border-indigo-500/70 bg-gradient-to-b from-indigo-500/[0.03] to-transparent dark:from-indigo-500/[0.05] dark:to-transparent shadow-[inset_0_0_12px_rgba(99,102,241,0.03)] dark:shadow-[inset_0_0_12px_rgba(99,102,241,0.06)]'
+                        : 'hover:border-zinc-350 dark:hover:border-white/10 hover:bg-zinc-50/50 dark:hover:bg-white/[0.03] hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)]',
                     )}
                   >
                     {/* Day Number Header */}
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center justify-between mb-1.5 select-none">
                       <span
                         className={cn(
-                          'text-[10px] font-bold font-mono px-1 rounded-md flex items-center justify-center h-4 min-w-[16px]',
+                          'text-xs font-semibold font-mono rounded-lg flex items-center justify-center w-6 h-6 transition-colors duration-150',
                           isToday
-                            ? 'bg-indigo-600 text-white'
+                            ? 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-600/25 dark:bg-indigo-500 dark:shadow-indigo-500/15'
                             : cell.isCurrentMonth
-                              ? 'text-zinc-700 dark:text-zinc-300'
+                              ? 'text-zinc-700 dark:text-zinc-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
                               : 'text-zinc-400 dark:text-zinc-600',
                         )}
                       >
                         {cell.day}
                       </span>
+                      {dayEvents.length > 0 && (
+                        <span className="text-[9px] text-zinc-400 dark:text-zinc-500 font-mono font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                          {dayEvents.length} {locale === 'ru' ? 'соб.' : 'evt.'}
+                        </span>
+                      )}
                     </div>
 
                     {/* Events wrapper */}
@@ -543,7 +585,7 @@ export default function CalendarPage() {
                             key={e.id}
                             onClick={(clickEv) => handleOpenEdit(clickEv, e)}
                             className={cn(
-                              'px-1.5 py-0.5 rounded-lg border text-[9px] font-semibold truncate leading-tight transition-transform duration-100 hover:scale-[1.02] active:scale-[0.98]',
+                              'px-2 py-0.5 rounded-md border text-[10px] font-medium truncate leading-tight transition-all duration-150 hover:translate-x-0.5 hover:brightness-105 active:scale-[0.98]',
                               cl.bg,
                               cl.border,
                               cl.text,
