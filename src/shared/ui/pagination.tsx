@@ -34,7 +34,9 @@ export function Pagination({ totalPages, className }: PaginationProps) {
     <div className={cn('flex items-center gap-1', className)}>
       {pages.map((p, i) =>
         p === '...' ? (
-          <span key={`dots-${i}`} className="px-2 text-zinc-400">…</span>
+          <span key={`dots-${i}`} className="px-2 text-zinc-400">
+            …
+          </span>
         ) : (
           <button
             key={p}

@@ -12,9 +12,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s/g, '-');
     return (
       <div className="flex flex-col gap-1.5">
-        {label && <label htmlFor={inputId} className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{label}</label>}
+        {label && (
+          <label htmlFor={inputId} className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            {label}
+          </label>
+        )}
         <input
-          ref={ref} id={inputId}
+          ref={ref}
+          id={inputId}
           className={cn(
             'h-9 w-full rounded-lg border px-3 text-sm outline-none transition-all duration-150',
             'bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-400',

@@ -2,7 +2,10 @@
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { cn } from '@shared/lib';
 
-interface SelectOption { label: string; value: string; }
+interface SelectOption {
+  label: string;
+  value: string;
+}
 interface SelectProps {
   options: SelectOption[];
   value: string;
@@ -29,17 +32,27 @@ export function Select({ options, value, onChange, placeholder, className }: Sel
       >
         <SelectPrimitive.Value placeholder={placeholder || 'Select...'} />
         <SelectPrimitive.Icon className="text-zinc-400">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path
+              d="M3 4.5L6 7.5L9 4.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content
           className="z-50 overflow-hidden rounded-lg border shadow-xl bg-white border-zinc-200 dark:bg-zinc-900 dark:border-white/10 animate-in fade-in-0 zoom-in-95 duration-150"
-          position="popper" sideOffset={4}
+          position="popper"
+          sideOffset={4}
         >
           <SelectPrimitive.Viewport className="p-1">
             {safeOptions.map((o) => (
-              <SelectPrimitive.Item key={o.value} value={o.value}
+              <SelectPrimitive.Item
+                key={o.value}
+                value={o.value}
                 className="flex items-center h-8 px-3 text-sm rounded-md cursor-pointer outline-none transition-colors text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/5 data-[state=checked]:text-indigo-600 dark:data-[state=checked]:text-indigo-400"
               >
                 <SelectPrimitive.ItemText>{o.label}</SelectPrimitive.ItemText>

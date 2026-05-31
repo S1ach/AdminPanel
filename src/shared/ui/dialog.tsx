@@ -2,7 +2,13 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cn } from '@shared/lib';
 
-interface DialogProps { open: boolean; onClose: () => void; title: string; children: React.ReactNode; className?: string; }
+interface DialogProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
 
 export function Dialog({ open, onClose, title, children, className }: DialogProps) {
   return (
@@ -16,10 +22,19 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
             className,
           )}
         >
-          <DialogPrimitive.Title className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">{title}</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
+            {title}
+          </DialogPrimitive.Title>
           {children}
           <DialogPrimitive.Close className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M4 4L12 12M12 4L4 12"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
