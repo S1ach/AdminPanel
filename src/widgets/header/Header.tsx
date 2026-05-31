@@ -408,11 +408,13 @@ export function Header() {
                           }}
                           className="px-3.5 py-2 hover:bg-zinc-50 dark:hover:bg-white/5 cursor-pointer flex items-center gap-2.5 transition-colors"
                         >
-                          <img
-                            src={p.photo}
-                            alt=""
-                            className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
-                          />
+                          <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-200/50 dark:border-white/10 shadow-sm flex-shrink-0">
+                            <img
+                              src={p.photo}
+                              alt=""
+                              className="w-full h-full object-cover transition-transform duration-300 hover:scale-125"
+                            />
+                          </div>
                           <div className="min-w-0 flex-1">
                             <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate leading-tight">
                               {p.name}
