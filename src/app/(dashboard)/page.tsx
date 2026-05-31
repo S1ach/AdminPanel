@@ -511,6 +511,7 @@ export default function DashboardPage() {
                   innerRadius={55}
                   outerRadius={75}
                   paddingAngle={3}
+                  stroke="none"
                 >
                   {translatedSalesByCategory.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
