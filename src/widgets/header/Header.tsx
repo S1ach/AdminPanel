@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Avatar } from '@shared/ui';
 import { useI18n } from '@shared/i18n';
-import { cn } from '@shared/lib';
+import { cn, generateXLS } from '@shared/lib';
 import { useGetAnalyticsQuery } from '@entities/analytics';
 import { useDebounce } from '@shared/hooks';
 import { useGetUsersQuery } from '@entities/user';
@@ -173,6 +173,24 @@ export function Header() {
     setShowExport(false);
   };
 
+  const exportRevenueReportXLS = () => {
+    if (!analyticsData?.revenueByMonth) return;
+    const columns = [
+      { key: 'month', label: locale === 'ru' ? 'Месяц' : 'Month', type: 'String' as const },
+      {
+        key: 'value',
+        label: locale === 'ru' ? 'Выручка (₽)' : 'Revenue (RUB)',
+        type: 'Number' as const,
+      },
+    ];
+    const data = analyticsData.revenueByMonth.map((row) => ({
+      month: row.month,
+      value: row.value,
+    }));
+    generateXLS(data, columns, 'revenue_report.xls', locale === 'ru' ? 'Выручка' : 'Revenue');
+    setShowExport(false);
+  };
+
   const exportCategoryReport = () => {
     if (!analyticsData?.salesByCategory) return;
     const headers = ['name', 'value'];
@@ -183,6 +201,25 @@ export function Header() {
       ),
     ].join('\r\n');
     triggerCSVDownload(csvContent, 'categories_report.csv');
+    setShowExport(false);
+  };
+
+  const exportCategoryReportXLS = () => {
+    if (!analyticsData?.salesByCategory) return;
+    const columns = [
+      { key: 'name', label: locale === 'ru' ? 'Категория' : 'Category', type: 'String' as const },
+      { key: 'value', label: locale === 'ru' ? 'Продажи' : 'Sales', type: 'Number' as const },
+    ];
+    const data = analyticsData.salesByCategory.map((row) => ({
+      name: row.name,
+      value: row.value,
+    }));
+    generateXLS(
+      data,
+      columns,
+      'categories_report.xls',
+      locale === 'ru' ? 'Категории' : 'Categories',
+    );
     setShowExport(false);
   };
 
@@ -391,10 +428,22 @@ export function Header() {
                 {locale === 'ru' ? 'Отчет по выручке (CSV)' : 'Revenue report (CSV)'}
               </button>
               <button
+                onClick={exportRevenueReportXLS}
+                className="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5 cursor-pointer border-t border-zinc-100 dark:border-white/[0.04] font-medium"
+              >
+                {locale === 'ru' ? 'Отчет по выручке (XLS)' : 'Revenue report (XLS)'}
+              </button>
+              <button
                 onClick={exportCategoryReport}
                 className="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5 cursor-pointer border-t border-zinc-100 dark:border-white/[0.04] font-medium"
               >
                 {locale === 'ru' ? 'Отчет по категориям (CSV)' : 'Category stats (CSV)'}
+              </button>
+              <button
+                onClick={exportCategoryReportXLS}
+                className="w-full text-left px-4 py-2 text-xs text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5 cursor-pointer border-t border-zinc-100 dark:border-white/[0.04] font-medium"
+              >
+                {locale === 'ru' ? 'Отчет по категориям (XLS)' : 'Category stats (XLS)'}
               </button>
             </div>
           )}
