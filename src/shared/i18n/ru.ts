@@ -19,6 +19,14 @@ export const ru = {
     recentEvents: 'Последние события',
     newUsers: 'Новые',
     churnedUsers: 'Ушедшие',
+    today: 'Сегодня',
+    days7: '7 дней',
+    days30: '30 дней',
+    custom: 'Свой период',
+    startDate: 'Начало',
+    endDate: 'Конец',
+    funnelTitle: 'Воронка конверсии пользователей',
+    heatmapTitle: 'Активность по дням и часам',
   },
   users: {
     title: 'Управление пользователями',
@@ -81,6 +89,7 @@ export const ru = {
     delivered: 'Доставлен',
     allPayment: 'Все статусы оплаты',
     allDelivery: 'Все статусы доставки',
+    printInvoice: 'Печать инвойса',
   },
   settings: {
     title: 'Настройки',

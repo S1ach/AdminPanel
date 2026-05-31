@@ -19,6 +19,14 @@ export const en = {
     recentEvents: 'Recent Events',
     newUsers: 'New',
     churnedUsers: 'Churned',
+    today: 'Today',
+    days7: '7 Days',
+    days30: '30 Days',
+    custom: 'Custom Period',
+    startDate: 'Start',
+    endDate: 'End',
+    funnelTitle: 'User Conversion Funnel',
+    heatmapTitle: 'Activity by Days & Hours',
   },
   users: {
     title: 'User Management',
@@ -81,6 +89,7 @@ export const en = {
     delivered: 'Delivered',
     allPayment: 'All payment statuses',
     allDelivery: 'All delivery statuses',
+    printInvoice: 'Print Invoice',
   },
   settings: {
     title: 'Settings',
