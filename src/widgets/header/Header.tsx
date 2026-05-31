@@ -339,7 +339,7 @@ export function Header() {
                           }}
                           className="px-3.5 py-2 hover:bg-zinc-50 dark:hover:bg-white/5 cursor-pointer flex items-center gap-2.5 transition-colors"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center flex-shrink-0 text-zinc-500 text-xs font-mono select-none">
+                          <div className="w-[42px] h-8 rounded-lg bg-zinc-100 dark:bg-white/5 flex items-center justify-center flex-shrink-0 text-zinc-500 text-[11px] font-mono select-none">
                             #{o.id}
                           </div>
                           <div className="min-w-0 flex-1">
