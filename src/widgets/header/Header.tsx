@@ -255,9 +255,55 @@ export function Header() {
         />
 
         {/* Global Search Results Dropdown Overlay */}
-        {showSearchResults && search.trim() !== '' && (
+        {showSearchResults && (
           <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-zinc-200 dark:border-white/[0.08] bg-white dark:bg-zinc-900 shadow-2xl py-2.5 z-50 max-h-[360px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150">
-            {isGlobalSearching ? (
+            {search.trim() === '' ? (
+              <div className="px-1.5 py-1">
+                <span className="px-3.5 py-1 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block mb-1">
+                  {locale === 'ru' ? 'Рекомендуем искать' : 'Suggested Searches'}
+                </span>
+                <div className="flex flex-col gap-0.5">
+                  {[
+                    {
+                      label: locale === 'ru' ? 'Активные заказы' : 'Active orders',
+                      query: 'доставлен',
+                    },
+                    {
+                      label: locale === 'ru' ? 'Новые пользователи' : 'New users',
+                      query: 'Владислав',
+                    },
+                    {
+                      label: locale === 'ru' ? 'Товар iPhone 15' : 'iPhone 15 product',
+                      query: 'iPhone',
+                    },
+                  ].map((sug) => (
+                    <button
+                      key={sug.label}
+                      type="button"
+                      onClick={() => {
+                        setSearch(sug.query);
+                      }}
+                      className="w-full text-left px-3.5 py-2 text-xs text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-white/5 cursor-pointer flex items-center gap-2.5 transition-colors font-medium rounded-lg"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.8}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                      <span>{sug.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : isGlobalSearching ? (
               <div className="px-4 py-3 text-xs text-zinc-400 dark:text-zinc-500 text-center font-medium">
                 {locale === 'ru' ? 'Поиск...' : 'Searching...'}
               </div>
