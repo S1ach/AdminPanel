@@ -23,15 +23,17 @@ export function Select({ options, value, onChange, placeholder, className }: Sel
     <SelectPrimitive.Root value={safeValue} onValueChange={(v) => onChange(v === ALL ? '' : v)}>
       <SelectPrimitive.Trigger
         className={cn(
-          'flex h-9 items-center justify-between rounded-lg border px-3 text-sm outline-none transition-all cursor-pointer gap-2',
+          'flex h-9 items-center justify-between rounded-lg border px-3 text-sm outline-none transition-all cursor-pointer gap-2 whitespace-nowrap min-w-0',
           'bg-white border-zinc-300 text-zinc-700 data-[placeholder]:text-zinc-400',
           'dark:bg-white/5 dark:border-white/10 dark:text-zinc-200 dark:data-[placeholder]:text-zinc-500',
           'focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20',
           className,
         )}
       >
-        <SelectPrimitive.Value placeholder={placeholder || 'Select...'} />
-        <SelectPrimitive.Icon className="text-zinc-400">
+        <span className="truncate block min-w-0 text-left flex-1">
+          <SelectPrimitive.Value placeholder={placeholder || 'Select...'} />
+        </span>
+        <SelectPrimitive.Icon className="text-zinc-400 flex-shrink-0">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path
               d="M3 4.5L6 7.5L9 4.5"

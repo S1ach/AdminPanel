@@ -71,7 +71,7 @@ function OrdersContent() {
   const loc = locale === 'ru' ? 'ru-RU' : 'en-US';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pt-2">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex-1 min-w-[200px]">
           <Input
@@ -84,13 +84,13 @@ function OrdersContent() {
           options={paymentOptions}
           value={paymentFilter}
           onChange={(v) => setParam('paymentStatus', v)}
-          className="w-48"
+          className="w-56"
         />
         <Select
           options={deliveryOptions}
           value={deliveryFilter}
           onChange={(v) => setParam('deliveryStatus', v)}
-          className="w-48"
+          className="w-56"
         />
       </div>
 

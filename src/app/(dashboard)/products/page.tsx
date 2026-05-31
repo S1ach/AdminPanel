@@ -136,7 +136,7 @@ function ProductsContent() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pt-2">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex-1 min-w-[200px]">
           <Input
