@@ -21,20 +21,6 @@
 
 ---
 
-## ✨ Features
-
-- **State Management & Caching**
-  - Unified Redux Toolkit global store configuration
-  - Asynchronous queries and endpoints using RTK Query
-  - Dynamic API route handling without aggressive caching
-
-- **Rich Administrative Modules**
-  - **Analytics:** Key KPI metrics, sparkline graphs, spline area revenue charts, sales by category, and activity heatmaps
-  - **User & Catalog Directory:** Complete pagination, filtering, searching, role-based controls, and CRUD operations
-  - **Calendar Event Manager:** Interactive task scheduler with date filtering, persisted on local storage
-
----
-
 ## 📦 Installation & Setup
 
 ### Prerequisites
