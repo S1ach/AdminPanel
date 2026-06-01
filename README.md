@@ -11,8 +11,6 @@
 
 **English** | [Русский](README.ru.md)
 
-**[🎮 Try Live Demo](#)** • **[📖 Documentation](#-project-architecture)** • **[🐛 Report Issue](https://github.com/S1ach/AdminPanel/issues)**
-
 </div>
 
 ---
@@ -104,22 +102,6 @@ npm run start
 
 ---
 
-## 🚀 Quick Start Configuration
-
-### Adding custom mock metrics
-
-The dashboard generates realistic data utilizing seeded faker parameters. You can customize metrics directly inside:
-
-```typescript
-// src/shared/mock/db.ts
-export function buildAnalytics(): MockAnalytics {
-  const months = ['Jan', 'Feb', 'Mar', ...];
-  // Customize your analytic values here
-}
-```
-
----
-
 ## ⚙️ Configuration & Features
 
 ### Complete Tech Stack
@@ -174,9 +156,3 @@ Husky and lint-staged automated hooks validate files on commit:
 
 - **Linting:** Standard Next.js & ESLint configurations (`npm run lint`).
 - **Formatting:** Prettier standard configuration (`npm run format`).
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more details.
