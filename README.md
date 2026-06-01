@@ -23,31 +23,6 @@
 
 ## ✨ Features
 
-<table>
-<tr>
-<td width="50%">
-
-### 🎨 User Interface & Styling
-
-- **Modern Glassmorphic Design**
-  - Harmonious and vibrant HSL colors
-  - Responsive layouts (Mobile-first grid systems)
-  - Animated UI interactions & micro-transitions
-- **Sleek Light & Dark Themes**
-  - Full support for light, dark, and system color preferences
-  - Integrated Radix UI component states
-  - Elegant charts customized for each theme
-
-- **Interactive Dashboard Widgets**
-  - Dynamic collapsing navigation sidebar
-  - Header search, calendar panel, and notifications
-  - Real-time performance indicators
-
-</td>
-<td width="50%">
-
-### ⚙️ Functionality & Core Architecture
-
 - **State Management & Caching**
   - Unified Redux Toolkit global store configuration
   - Asynchronous queries and endpoints using RTK Query
@@ -57,10 +32,6 @@
   - **Analytics:** Key KPI metrics, sparkline graphs, spline area revenue charts, sales by category, and activity heatmaps
   - **User & Catalog Directory:** Complete pagination, filtering, searching, role-based controls, and CRUD operations
   - **Calendar Event Manager:** Interactive task scheduler with date filtering, persisted on local storage
-
-</td>
-</tr>
-</table>
 
 ---
 
