@@ -17,7 +17,7 @@
 
 ## 🌟 Предпросмотр
 
-![Обзор дашборда](https://picsum.photos/seed/dashboard-preview/1200/600) _(Замените на реальный скриншот вашей панели)_
+![Обзор дашборда](public/dashboard-preview.png)
 
 ---
 

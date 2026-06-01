@@ -17,7 +17,7 @@
 
 ## 🌟 Preview
 
-![Dashboard Preview](https://picsum.photos/seed/dashboard-preview/1200/600) _(Replace with actual dashboard screenshot)_
+![Dashboard Preview](public/dashboard-preview.png)
 
 ---
 
